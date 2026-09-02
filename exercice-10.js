@@ -12,9 +12,12 @@ function genererRapport(ventes) {
     //1
 
     const totalMontant = ventes
+        // .map(function (ventes) {
+        //     return ventes.montant
+        // })
         .reduce((somme, vente) => {
             return somme + vente.montant
-        })
+        },0)
 
     //2
 
