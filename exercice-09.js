@@ -56,4 +56,3 @@ const commandes = [
 console.log(calculerCommande(commandes[0].montant , commandes[0].statut))
 console.log(calculerCommande(commandes[1].montant , commandes[1].statut))
 console.log(calculerCommande(commandes[2].montant , commandes[2].statut))
-g
