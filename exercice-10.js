@@ -45,11 +45,17 @@ function genererRapport(ventes) {
     }, {})
 
     //4 
+    const montantsParVendeur = Object.values(caParVendeur)
 
-    const moyenne = Object.values(caParVendeur).reduce((somme, nomber) => { return somme + nomber }) / Object.values(caParVendeur).length
+    const moyenne = montantsParVendeur.reduce((somme, montant) => {
+        return somme + montant
+    }, 0) / montantsParVendeur.length
+
     const vendeursAuDessusMoyenne = Object.entries(caParVendeur)
         .filter(([vendeur, montant]) => montant > moyenne)
         .map(([vendeur]) => vendeur)
+
+        
     let text = `=== RAPPORT DES VENTES ===\n
 Chiffre d'affaires total : ${totalMontant} DH\n
 Meilleure vente : ${biggestSell.produit} (${biggestSell.vendeur}) - ${biggestSell.montant} DH\n
