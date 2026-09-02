@@ -21,9 +21,9 @@ function genererRapport(ventes) {
 
     //2
 
-    const biggestSell = ventes.reduce((bigger, obj) => {
-        if (bigger.montant < obj.montant) {
-            return obj
+    const biggestSell = ventes.reduce((bigger, vente) => {
+        if (bigger.montant < vente.montant) {
+            return vente
         }
 
         return bigger
@@ -32,15 +32,15 @@ function genererRapport(ventes) {
 
     //3
 
-    const caParVendeur = ventes.reduce((objec, vente) => {
+    const caParVendeur = ventes.reduce((caParVendeur, vente) => {
 
-        if (objec[vente.vendeur] === undefined) {
-            objec[vente.vendeur] = 0
+        if (caParVendeur[vente.vendeur] === undefined) {
+            caParVendeur[vente.vendeur] = 0
         }
 
-        objec[vente.vendeur] += vente.montant
+        caParVendeur[vente.vendeur] += vente.montant
 
-        return objec
+        return caParVendeur
 
     }, {})
 
@@ -55,7 +55,7 @@ function genererRapport(ventes) {
         .filter(([vendeur, montant]) => montant > moyenne)
         .map(([vendeur]) => vendeur)
 
-        
+
     let text = `=== RAPPORT DES VENTES ===\n
 Chiffre d'affaires total : ${totalMontant} DH\n
 Meilleure vente : ${biggestSell.produit} (${biggestSell.vendeur}) - ${biggestSell.montant} DH\n
