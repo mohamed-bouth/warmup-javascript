@@ -4,7 +4,7 @@ const ventes = [
     { vendeur: "Amina", produit: "Casque audio", montant: 900, mois: "fevrier" },
     { vendeur: "Sara", produit: "Tablette", montant: 3100, mois: "fevrier" },
     { vendeur: "Youssef", produit: "Clavier", montant: 450, mois: "mars" },
-    { vendeur: "Sara", produit: "Ecran 27 pouces", montant: 2600, mois: "mars" }
+    { vendeur: "Sara", produit: "Ecran 27 pouces", montant: 9000, mois: "mars" }
 ];
 
 
@@ -17,7 +17,7 @@ function genererRapport(ventes) {
         // })
         .reduce((somme, vente) => {
             return somme + vente.montant
-        },0)
+        }, 0)
 
     //2
 
@@ -47,7 +47,9 @@ function genererRapport(ventes) {
     //4 
 
     const moyenne = Object.values(caParVendeur).reduce((somme, nomber) => { return somme + nomber }) / Object.values(caParVendeur).length
-
+    const vendeursAuDessusMoyenne = Object.entries(caParVendeur)
+        .filter(([vendeur, montant]) => montant > moyenne)
+        .map(([vendeur]) => vendeur)
     let text = `=== RAPPORT DES VENTES ===\n
 Chiffre d'affaires total : ${totalMontant} DH\n
 Meilleure vente : ${biggestSell.produit} (${biggestSell.vendeur}) - ${biggestSell.montant} DH\n
@@ -58,7 +60,7 @@ CA par vendeur :\n`
         text += `${caParVendeurArray[i][0]} : ${caParVendeurArray[i][1]} DH \n`;
     }
     text += `Moyenne par vendeur : ${moyenne} DH\n
-Au-dessus de la moyenne : Amina\n`
+Au-dessus de la moyenne : ${vendeursAuDessusMoyenne.join(", ")}\n`
 
     return text
 }
