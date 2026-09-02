@@ -52,7 +52,7 @@ function genererRapport(ventes) {
 Chiffre d'affaires total : ${totalMontant} DH\n
 Meilleure vente : ${biggestSell.produit} (${biggestSell.vendeur}) - ${biggestSell.montant} DH\n
 CA par vendeur :\n`
-    caParVendeurArray = Object.entries(caParVendeur)
+    const caParVendeurArray = Object.entries(caParVendeur)
     console.log(caParVendeurArray)
     for (let i = 0; i < caParVendeurArray.length; i++) {
         text += `${caParVendeurArray[i][0]} : ${caParVendeurArray[i][1]} DH \n`;
