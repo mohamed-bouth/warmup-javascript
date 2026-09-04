@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Memory Card Game</title>
+
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         PAGE 1 : HOME
+    ========================== -->
+
+    <section class="home-page" id="home">
+
+        <div class="home-content">
+
+            <p class="label">WARM-UP JAVASCRIPT</p>
+
+            <h1>
+                Memory <span>Cards</span>
+            </h1>
+
+            <p class="description">
+                Turn over the cards, find all the pairs and test your memory.
+            </p>
+
+            <div class="choice-container">
+
+                <div class="name-container">
+                    <label for="name">Name</label>
+                    <input type="text" id="name-input">
+                </div>
+
+                <div class="info-container">
+
+                    <div class="info-card">
+                        <strong>easy</strong>
+                        <input class="radio-input" type="radio" name="difficulty" value="easy" checked>
+                    </div>
+
+                    <div class="info-card">
+                        <strong>medium</strong>
+                        <input class="radio-input" type="radio" name="difficulty" value="medium">
+                    </div>
+
+                    <div class="info-card">
+                        <strong>hard</strong>
+                        <input class="radio-input" type="radio" name="difficulty" value="hard">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <a  class="start-button">
+                Start Game!
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <section class="game-page" id="game">
+
+        <div class="game-container">
+
+            <!-- Header -->
+
+            <header class="game-header">
+
+                <div>
+                    <p class="label">MEMORY GAME</p>
+
+                    <h2>
+                        Match Card if you can!
+                    </h2>
+                </div>
+
+                <button class="secondary-button" id="restart-button">
+                    Restart
+                </button>
+
+            </header>
+
+
+            <!-- Statistics -->
+
+            <div class="stats-container">
+
+                <div class="stat-card">
+                    <span>Cards</span>
+                    <strong id="cards-number"></strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Pairs Matched</span>
+                    <strong id="pair-matched"> / </strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Points</span>
+                    <strong id="points-output"></strong>
+                </div>
+
+                <div class="stat-card">
+                    <span>Time</span>
+                    <strong id="time-output"></strong>
+                </div>
+
+            </div>
+
+
+            <!-- Cards -->
+
+            <div class="game-board">
+
+            </div>
+
+        </div>
+
+    </section>
+<script src="./assets/js/script.js"></script>
+</body>
+
+</html>
