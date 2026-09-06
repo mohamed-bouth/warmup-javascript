@@ -5,6 +5,8 @@ const gamePage = document.querySelector("#game")
 const nameInput = document.querySelector("#name-input")
 const restartBtn = document.querySelector("#restart-button")
 const endBtn = document.querySelector("#end-button")
+const nameDisplay = document.querySelector("#name-display")
+const pointsDisplay = document.querySelector("#points-display")
 
 const rawData = [
     { id: 1, image: "apple.png", matched: false, value: "apple" },
@@ -23,13 +25,27 @@ const rawData = [
     { id: 10, image: "watermelon.png", matched: false, value: "watermelon" },
 
     { id: 11, image: "kiwi.png", matched: false, value: "kiwi" },
-    { id: 12, image: "kiwi.png", matched: false, value: "kiwi" }
+    { id: 12, image: "kiwi.png", matched: false, value: "kiwi" },
+
+    { id: 13, image: "mango.png", matched: false, value: "mango" },
+    { id: 14, image: "mango.png", matched: false, value: "mango" },
+
+    { id: 15, image: "pineapple.png", matched: false, value: "pineapple" },
+    { id: 16, image: "pineapple.png", matched: false, value: "pineapple" },
+
+    { id: 17, image: "strawberry.png", matched: false, value: "strawberry" },
+    { id: 18, image: "strawberry.png", matched: false, value: "strawberry" },
+
+    { id: 19, image: "lemon.png", matched: false, value: "lemon" },
+    { id: 20, image: "lemon.png", matched: false, value: "lemon" }
 ];
 
 
 let data = []
 
-const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const rawNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
+let numbers = [];
 
 let pairMatched = 0;
 let pairNumber = 0;
@@ -41,6 +57,7 @@ function restData() {
     lockboard = false
     points = 0
     time = 0
+    localStorage.removeItem("difficulty")
     data = data.map(card => {
         if (card.matched === true) {
             card.matched = false
@@ -49,12 +66,36 @@ function restData() {
     })
 }
 
+function loadData() {
+    const name = localStorage.getItem("name") || "Guest"
+    nameDisplay.textContent = name
+    nameInput.value = name
+
+    const points = localStorage.getItem("points") || 0
+    pointsDisplay.textContent = points
+}
+
+loadData();
+
 function downloadData(option) {
+    numbers = [];
+    data = [];
     if (option.difficulty === "easy") {
-        data = rawData;
-        return true
+        numbers = rawNumbers.slice(0, 12);
+        data = rawData.slice(0, 12);
+        return { data, numbers };
     }
-    return false
+    if (option.difficulty === "medium") {
+        numbers = rawNumbers.slice(0, 16);
+        data = rawData.slice(0, 16);
+        return { data, numbers };
+    }
+    if (option.difficulty === "hard") {
+        numbers = rawNumbers.slice(0, 20);
+        data = rawData.slice(0, 20);
+        return { data, numbers };
+    }
+    return false;
 }
 
 function randomize(numbers) {
@@ -65,20 +106,33 @@ function randomize(numbers) {
     }
 }
 
-function displayCards() {
+function displayCards(obj) {
+    let data = obj.data
+    let numbers = obj.numbers
+
     randomize(numbers)
+    console.log(numbers)
     gameBoard.innerHTML = '';
     for (let i = 0; i < numbers.length; i++) {
         for (let j = 0; j < numbers.length; j++) {
             if (numbers[i] === data[j].id) {
+                console.log(true)
                 gameBoard.innerHTML += `<div class="memory-card" data-value="${data[j].id}">
                                             <div class="card-hidden">
-                                                <h2>?</h2>
+                                                <img src="./assets/image/${data[j].image}">
                                             </div>
                                         </div>`
             }
         }
     }
+    let cardsContaner = document.querySelectorAll(".memory-card")
+    setTimeout(() => {
+        cardsContaner.forEach(card => {
+            card.innerHTML = `<div class="card-hidden">
+                           <h2>?</h2>
+                        </div>`
+        });
+    }, 1000);
 }
 
 function showGamePage() {
@@ -95,6 +149,8 @@ function saveinputData() {
     const difficultyInput = document.querySelector(".radio-input:checked")
     const name = nameInput.value
     const difficulty = difficultyInput.value
+    localStorage.setItem("name", name)
+    localStorage.setItem("difficulty", difficulty)
 
     return {
         name, difficulty
@@ -129,7 +185,7 @@ function showNumberOfCards() {
 }
 
 function isfinished(force = false) {
-    if(force) {
+    if (force) {
         return true
     }
     matchedNumber = data.filter(card => card.matched === true).length
@@ -143,6 +199,7 @@ function isfinished(force = false) {
 
 firstCard = null;
 lockboard = false;
+let gameInterval = null;
 
 function addEventforCards(cardsContaner) {
     cardsContaner.forEach(card => {
@@ -168,7 +225,10 @@ function addEventforCards(cardsContaner) {
                     showNumberOfPairs()
                     points += 100
                     if (isfinished()) {
-                        alert("yaaaay")
+                        if (gameInterval !== null) {
+                            clearInterval(gameInterval);
+                            localStorage.setItem("points", points)
+                        }
                     }
                 } else {
                     showCard(card)
@@ -190,13 +250,13 @@ function addEventforCards(cardsContaner) {
 }
 
 function showPoints() {
-    if(!isfinished()){
+    if (!isfinished()) {
         points -= 5
     }
     const pointsAria = document.querySelector("#points-output")
     pointsAria.textContent = points
 }
- 
+
 function showTime() {
     if (!isfinished()) {
         time += 1
@@ -215,37 +275,47 @@ startBtn.addEventListener("click", () => {
     if (!isdownloaded) {
         return
     }
-    displayCards();
+    displayCards(isdownloaded);
+
     showGamePage();
     showNumberOfPairs()
     showNumberOfCards();
     const cardsContaner = document.querySelectorAll(".memory-card")
     addEventforCards(cardsContaner)
-    setInterval(() => {
+    if (gameInterval !== null) {
+        clearInterval(gameInterval);
+    }
+    gameInterval = setInterval(() => {
+        showPoints();
+        showTime();
+    }, 1000);
+
+})
+
+restartBtn.addEventListener("click", () => {
+    let option = { difficulty: localStorage.getItem("difficulty") || "easy" }
+    let isdownloaded = downloadData(option);
+    if (!isdownloaded) {
+        return
+    }
+    displayCards(isdownloaded);
+    restData();
+    showNumberOfPairs();
+    showNumberOfCards();
+    const cardsContaner = document.querySelectorAll(".memory-card")
+    addEventforCards(cardsContaner)
+    if (gameInterval !== null) {
+        clearInterval(gameInterval);
+    }
+    gameInterval = setInterval(() => {
         showPoints();
         showTime();
     }, 1000);
 })
 
-restartBtn.addEventListener("click", () => {
-    restData();
-    displayCards();
-    showNumberOfPairs();
-    showNumberOfCards();
-    const cardsContaner = document.querySelectorAll(".memory-card")
-    addEventforCards(cardsContaner)
-})
-
 endBtn.addEventListener("click", () => {
     restData();
     isfinished(true);
+    loadData()
     showHomePage();
 })
-
-
-
-
-
-
-
-
