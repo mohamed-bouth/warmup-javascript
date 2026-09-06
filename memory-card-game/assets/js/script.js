@@ -4,6 +4,7 @@ const homePage = document.querySelector("#home")
 const gamePage = document.querySelector("#game")
 const nameInput = document.querySelector("#name-input")
 const restartBtn = document.querySelector("#restart-button")
+const endBtn = document.querySelector("#end-button")
 
 const rawData = [
     { id: 1, image: "apple.png", matched: false, value: "apple" },
@@ -36,6 +37,10 @@ let points = 0;
 let time = 0;
 
 function restData() {
+    firstCard = null;
+    lockboard = false
+    points = 0
+    time = 0
     data = data.map(card => {
         if (card.matched === true) {
             card.matched = false
@@ -81,6 +86,11 @@ function showGamePage() {
     homePage.style.display = 'none';
 }
 
+function showHomePage() {
+    gamePage.style.display = "none";
+    homePage.style.display = 'flex';
+}
+
 function saveinputData() {
     const difficultyInput = document.querySelector(".radio-input:checked")
     const name = nameInput.value
@@ -118,7 +128,10 @@ function showNumberOfCards() {
     cardsNumberAria.innerHTML = data.length
 }
 
-function isfinished() {
+function isfinished(force = false) {
+    if(force) {
+        return true
+    }
     matchedNumber = data.filter(card => card.matched === true).length
     totalCard = data.length
     if (matchedNumber === totalCard) {
@@ -126,6 +139,7 @@ function isfinished() {
     }
     return false
 }
+
 
 firstCard = null;
 lockboard = false;
@@ -209,23 +223,23 @@ startBtn.addEventListener("click", () => {
     addEventforCards(cardsContaner)
     setInterval(() => {
         showPoints();
-    }, 1000);
-    setInterval(() => {
         showTime();
     }, 1000);
 })
 
 restartBtn.addEventListener("click", () => {
-    firstCard = null;
-    lockboard = false
-    points = 0
-    console.log(data)
     restData();
     displayCards();
     showNumberOfPairs();
     showNumberOfCards();
     const cardsContaner = document.querySelectorAll(".memory-card")
     addEventforCards(cardsContaner)
+})
+
+endBtn.addEventListener("click", () => {
+    restData();
+    isfinished(true);
+    showHomePage();
 })
 
 
